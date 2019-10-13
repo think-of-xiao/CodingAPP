@@ -2,29 +2,27 @@ package com.example.administrator.myapplication.adapter
 
 import android.content.Context
 import android.view.ViewGroup
-import com.loopeer.cardstack.CardStackView
-import com.loopeer.cardstack.StackAdapter
 import android.view.View
 import android.graphics.PorterDuff
 import android.support.v4.content.ContextCompat
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.example.administrator.myapplication.R
+import com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
+import com.example.administrator.myapplication.view.cardstackviewlib.StackAdapter
 
 
 class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
     override fun bindView(data: Int?, position: Int, holder: CardStackView.ViewHolder?) {
         if (holder is ColorItemLargeHeaderViewHolder) {
-            val h = holder as ColorItemLargeHeaderViewHolder
-            h.onBind(data, position)
+            holder.onBind(data, position)
         }
         if (holder is ColorItemWithNoHeaderViewHolder) {
-            val h = holder as ColorItemWithNoHeaderViewHolder
-            h.onBind(data, position)
+            holder.onBind(data, position)
         }
         if (holder is ColorItemViewHolder) {
-            val h = holder as ColorItemViewHolder
-            h.onBind(data, position)
+            holder.onBind(data, position)
         }
     }
 
@@ -47,12 +45,13 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
+        /*return when (position) {
             6 -> //TODO TEST LARGER ITEM
                 R.layout.list_card_item_larger_header
             10 -> R.layout.list_card_item_with_no_header
             else -> R.layout.list_card_item
-        }
+        }*/
+        return R.layout.list_card_item_larger_header //试试只用一个布局
     }
 
     internal class ColorItemViewHolder(view: View) : CardStackView.ViewHolder(view) {
@@ -108,6 +107,7 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
 
         override fun onItemExpand(b: Boolean) {
             mContainerContent.visibility = if (b) View.VISIBLE else View.GONE
+            mContainerContent.visibility = if (b) View.VISIBLE else View.GONE
         }
 
         override fun onAnimationStateChange(state: Int, willBeSelect: Boolean) {
@@ -124,11 +124,13 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
             mLayout.background.setColorFilter(ContextCompat.getColor(context, data!!), PorterDuff.Mode.SRC_IN)
             mTextTitle.text = position.toString()
 
+            itemView.findViewById<ImageButton>(R.id.bnt)
+                    .setOnClickListener { Toast.makeText(context, "窝点击了imageButton", Toast.LENGTH_LONG).show() }
             itemView.findViewById<TextView>(R.id.text_view)
                     .setOnClickListener {
-                        (itemView.parent as CardStackView)
-                                .performItemClick(this@ColorItemLargeHeaderViewHolder)
-                    }
+                (itemView.parent as CardStackView)
+                        .performItemClick(this@ColorItemLargeHeaderViewHolder)
+            }
         }
 
     }

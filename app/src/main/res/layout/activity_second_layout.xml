@@ -1,35 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardstackview="http://schemas.android.com/apk/res-auto">
 
-    <com.loopeer.cardstack.CardStackView
-        android:id="@+id/stackView"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:clipToPadding="false"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="12dp"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/button_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:orientation="vertical"
-        android:gravity="center">
-        <Button
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@color/color_1"
-            android:text="Pre"
-            android:onClick="onPreClick"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next"
-            android:onClick="onNextClick"/>
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/button_top_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@color/color_1"
+                    android:text="共24张卡片" />
+
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加银行卡" />
+            </LinearLayout>
+
+            <com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
+                android:id="@+id/stackView"
+                android:layout_below="@id/button_top_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clipToPadding="false"
+                android:paddingTop="15dp"
+                cardstackview:stackAnimationType="allDown"
+                cardstackview:stackHeaderHeight="120dp"
+                cardstackview:stackOverlapGaps="30dp"
+                cardstackview:stackOverlapGapsCollapse="10dp" />
+
+            <LinearLayout
+                android:id="@+id/button_bottom_container"
+                android:layout_below="@id/stackView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="-200dp"
+                android:background="@mipmap/ic_launcher"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onPreClick"
+                    android:src="@color/color_1"
+                    android:text="Pre" />
+
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onNextClick"
+                    android:text="Next" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="Every corner must (initially) be provided a corner radius greater than 1, or else no corners are rounded. If you want specific corners to not be rounded, a work-around is to use android:radius to set a default corner radius greater than 1, but then override each and every corner with the values you really want, providing zero (0dp) where you don't want rounded corners.Every corner must (initially) be provided a corner radius greater than 1, or else no corners are rounded. If you want specific corners to not be rounded, a work-around is to use android:radius to set a default corner radius greater than 1, but then override each and every corner with the values you really want, providing zero (0dp) where you don't want rounded corners.Every corner must (initially) be provided a corner radius greater than 1, or else no corners are rounded. If you want specific corners to not be rounded, a work-around is to use android:radius to set a default corner radius greater than 1, but then override each and every corner with the values you really want, providing zero (0dp) where you don't want rounded corners.Every corner must (initially) be provided a corner radius greater than 1, or else no corners are rounded. If you want specific corners to not be rounded, a work-around is to use android:radius to set a default corner radius greater than 1, but then override each and every corner with the values you really want, providing zero (0dp) where you don't want rounded corners.Every corner must (initially) be provided a corner radius greater than 1, or else no corners are rounded. If you want specific corners to not be rounded, a work-around is to use android:radius to set a default corner radius greater than 1, but then override each and every corner with the values you really want, providing zero (0dp) where you don't want rounded corners." />
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 </merge>
