@@ -212,6 +212,9 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         updateSelectPosition(mSelectPosition);
     }
 
+    /**
+     * 清除滑动和位移，全部回归初始位置
+     */
     public void clearScrollYAndTranslation() {
         if (mSelectPosition != DEFAULT_SELECT_POSITION) {
             clearSelectPosition();
@@ -286,6 +289,7 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
                 performItemClick(mViewHolders.get(mSelectPosition));
             }
         });
+        //每个item项的点击事件
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

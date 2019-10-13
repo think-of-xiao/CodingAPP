@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import com.example.administrator.myapplication.view.cardstackviewlib.AllMoveDownAnimatorAdapter
 import com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
 import com.example.administrator.myapplication.view.cardstackviewlib.UpDownAnimatorAdapter
@@ -72,6 +73,9 @@ class CardStackViewActivity : AppCompatActivity(), CardStackView.ItemExpendListe
 
     override fun onItemExpend(expend: Boolean) {
         cardStackViewItemExpand = expend
+
+        updateCardItemVisible(expend)
+
         button_top_container?.visibility = if (expend) View.GONE else View.VISIBLE
         button_bottom_container?.visibility = if (expend) View.GONE else View.VISIBLE
         if (expend) {
@@ -81,5 +85,20 @@ class CardStackViewActivity : AppCompatActivity(), CardStackView.ItemExpendListe
         Log.w("", "stackView的高度------------》${stackView.measuredHeight}")
         Log.w("", "stackView的高度by getShowHeight------------》${stackView.showHeight}")
         Log.w("", "stackView的child高度------------》${stackView.getChildAt(0).measuredHeight}")
+    }
+
+    /**
+     * 更新展开时某一项itemView头上的向上箭头显隐状态
+     */
+    private fun updateCardItemVisible(expend: Boolean) {
+        for (num in 0 until stackView.childCount) {
+            stackView.getChildAt(num).findViewById<ImageView>(R.id.item_top_iv).visibility = View.GONE
+        }
+        val selectPosition = stackView.selectPosition
+        if (expend && stackView.childCount >= 2 && selectPosition == 0) {
+            stackView.getChildAt(stackView.childCount - 1).findViewById<ImageView>(R.id.item_top_iv).visibility = View.VISIBLE
+        } else if (expend && stackView.childCount >= 2 && selectPosition == stackView.childCount - 1) {
+            stackView.getChildAt(selectPosition - 1).findViewById<ImageView>(R.id.item_top_iv).visibility = View.VISIBLE
+        }
     }
 }

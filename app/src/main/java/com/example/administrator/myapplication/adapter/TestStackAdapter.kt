@@ -6,6 +6,7 @@ import android.view.View
 import android.graphics.PorterDuff
 import android.support.v4.content.ContextCompat
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.administrator.myapplication.R
@@ -95,18 +96,11 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
     }
 
     internal class ColorItemLargeHeaderViewHolder(view: View) : CardStackView.ViewHolder(view) {
-        var mLayout: View
-        var mContainerContent: View
-        var mTextTitle: TextView
-
-        init {
-            mLayout = view.findViewById(R.id.frame_list_card_item)
-            mContainerContent = view.findViewById(R.id.container_list_content)
-            mTextTitle = view.findViewById<TextView>(R.id.text_list_card_title)
-        }
+        var mLayout: View = view.findViewById(R.id.frame_list_card_item)
+        var mContainerContent: View = view.findViewById(R.id.container_list_content)
+        var mTextTitle: TextView = view.findViewById<TextView>(R.id.text_list_card_title)
 
         override fun onItemExpand(b: Boolean) {
-            mContainerContent.visibility = if (b) View.VISIBLE else View.GONE
             mContainerContent.visibility = if (b) View.VISIBLE else View.GONE
         }
 

@@ -9,15 +9,18 @@ public class AllMoveDownAnimatorAdapter extends AnimatorAdapter {
         super(cardStackView);
     }
 
+    @Override
     protected void itemExpandAnimatorSet(final CardStackView.ViewHolder viewHolder, int position) {
         final View itemView = viewHolder.itemView;
         itemView.clearAnimation();
+        //设置选中的item项往上走的动画
         ObjectAnimator oa = ObjectAnimator.ofFloat(itemView, View.Y, itemView.getY(), mCardStackView.getScrollY() + mCardStackView.getPaddingTop());
         mSet.play(oa);
         int collapseShowItemCount = 0;
+        //遍历其它item项，设置它们的位移动画
         for (int i = 0; i < mCardStackView.getChildCount(); i++) {
             int childTop;
-            if (i == mCardStackView.getSelectPosition()) continue;
+            if (i == mCardStackView.getSelectPosition()) continue; //如果是选中项，退回执行下一个循环
             final View child = mCardStackView.getChildAt(i);
             child.clearAnimation();
             if (i > mCardStackView.getSelectPosition() && collapseShowItemCount < mCardStackView.getNumBottomShow()) {

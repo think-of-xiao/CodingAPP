@@ -22,22 +22,44 @@ public abstract class AnimatorAdapter {
         mSet.setDuration(getDuration());
     }
 
+    // 添加flag的作用为只有在全部收缩的时候点击item才展开，其它情况点击全部为收缩还原（0的时候展开）
+    private int keepOneFlag = 0;
+
     public void itemClick(final CardStackView.ViewHolder viewHolder, int position) {
         if (mSet != null && mSet.isRunning()) return;
         initAnimatorSet();
         if (mCardStackView.getSelectPosition() == position) {
-            Log.w("是一样的", mCardStackView.getSelectPosition()+"----------"+position);
+            keepOneFlag = 0;
+            Log.w("点击的是同一项item", mCardStackView.getSelectPosition()+"----------"+position);
             onItemCollapse(viewHolder);
         } else {
-            Log.w("不是一样的", mCardStackView.getSelectPosition()+"----------"+position);
-            onItemExpand(viewHolder, position);
+            Log.w("点击的是不同项item", mCardStackView.getSelectPosition()+"----------"+position);
+            if (keepOneFlag == 1){
+                keepOneFlag = 0;
+                // 这种做法bug太多
+//                onItemCollapse(viewHolder);
+                // 直接调用cardStackView中clearScrollYAndTranslation方法回归初始状态就行
+                mCardStackView.clearScrollYAndTranslation();
+            }else if(keepOneFlag == 0) {
+                keepOneFlag = 1;
+                onItemExpand(viewHolder, position);
+            }
         }
         if (mCardStackView.getChildCount() == 1)
             mSet.end();
     }
 
+    /**
+     * 点击item展开时其它item往下走的动画
+     * @param viewHolder item布局的viewHolder
+     * @param position 点击的item下标
+     */
     protected abstract void itemExpandAnimatorSet(CardStackView.ViewHolder viewHolder, int position);
 
+    /**
+     * item的收缩动画
+     * @param viewHolder item布局的viewHolder
+     */
     protected abstract void itemCollapseAnimatorSet(CardStackView.ViewHolder viewHolder);
 
     private void onItemExpand(final CardStackView.ViewHolder viewHolder, int position) {
