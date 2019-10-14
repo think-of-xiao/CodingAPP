@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:background="@color/colorPrimary60"
+        android:background="@android:color/transparent"
         android:overScrollMode="never"
         android:paddingBottom="60dp"
         android:scrollbars="none">

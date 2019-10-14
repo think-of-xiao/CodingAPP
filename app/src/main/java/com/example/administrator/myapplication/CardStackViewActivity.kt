@@ -17,8 +17,8 @@ import com.example.administrator.myapplication.view.cardstackviewlib.UpDownAnima
 import com.example.administrator.myapplication.view.cardstackviewlib.UpDownStackAnimatorAdapter
 
 class CardStackViewActivity : AppCompatActivity(), CardStackView.ItemExpendListener {
-    private var DATAS = arrayOf(R.color.color_1, R.color.color_2, R.color.color_3/*,
-            R.color.color_4, R.color.color_5, R.color.color_6, R.color.color_7, R.color.color_8,
+    private var DATAS = arrayOf(R.color.color_1, R.color.color_2, R.color.color_3,
+            R.color.color_4/*, R.color.color_5, R.color.color_6, R.color.color_7, R.color.color_8,
             R.color.color_9, R.color.color_10, R.color.color_11, R.color.color_12, R.color.color_13,
             R.color.color_14, R.color.color_15, R.color.color_16, R.color.color_17, R.color.color_18,
             R.color.color_19, R.color.color_20, R.color.color_21, R.color.color_22, R.color.color_23,
@@ -82,9 +82,9 @@ class CardStackViewActivity : AppCompatActivity(), CardStackView.ItemExpendListe
             nsv.fling(0) //解决NestedScrollView调用smoothScrollTo回不到顶部的问题
             nsv.smoothScrollTo(0, 0)
         }
-        Log.w("", "stackView的高度------------》${stackView.measuredHeight}")
-        Log.w("", "stackView的高度by getShowHeight------------》${stackView.showHeight}")
-        Log.w("", "stackView的child高度------------》${stackView.getChildAt(0).measuredHeight}")
+        Log.w("---", "stackView的高度------------》${stackView.measuredHeight}")
+        Log.w("---", "stackView的高度by getShowHeight------------》${stackView.showHeight}")
+        Log.w("---", "stackView的child高度------------》${stackView.getChildAt(0).measuredHeight}")
     }
 
     /**
@@ -95,8 +95,8 @@ class CardStackViewActivity : AppCompatActivity(), CardStackView.ItemExpendListe
             stackView.getChildAt(num).findViewById<ImageView>(R.id.item_top_iv).visibility = View.GONE
         }
         val selectPosition = stackView.selectPosition
-        if (expend && stackView.childCount >= 2 && selectPosition == 0) {
-            stackView.getChildAt(stackView.childCount - 1).findViewById<ImageView>(R.id.item_top_iv).visibility = View.VISIBLE
+        if (expend && stackView.childCount >= 2 && selectPosition != stackView.childCount - 1) {
+            stackView.getChildAt(selectPosition + 1).findViewById<ImageView>(R.id.item_top_iv).visibility = View.VISIBLE
         } else if (expend && stackView.childCount >= 2 && selectPosition == stackView.childCount - 1) {
             stackView.getChildAt(selectPosition - 1).findViewById<ImageView>(R.id.item_top_iv).visibility = View.VISIBLE
         }

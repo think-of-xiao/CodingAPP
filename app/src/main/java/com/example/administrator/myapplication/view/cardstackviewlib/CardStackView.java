@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.OverScroller;
 
 import com.example.administrator.myapplication.R;
+import com.example.administrator.myapplication.utils.ScreenUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,20 +128,23 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         measureChild(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private int screenWidth;
-
     @SuppressLint("NewApi")
     private void checkContentHeightByParent() {
-//        View parentView = (View) getParent();
-//        Log.w("", parentView.getMeasuredHeightAndState()+"-"+parentView.getPaddingTop()+"-"+parentView.getPaddingBottom());
-//        mShowHeight = parentView.getMeasuredHeight() - parentView.getPaddingTop() - parentView.getPaddingBottom();
-        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        if (windowManager != null) {
-            DisplayMetrics outMetrics = new DisplayMetrics();
-            windowManager.getDefaultDisplay().getRealMetrics(outMetrics);
-            screenWidth = outMetrics.widthPixels;
+        // 修改了此处，判断是否展开
+        // 这里初次进来肯定是没展开的会走else内容，而else内容中如果总长度mTotalLength为默认值0时，那么mShowHeight会赋值为父容器的测量高度，达到一个包裹的作用
+        // 而当mTotalLength不为0时，说明不是首次展开了，mTotalLength已被赋了值，此时把mTotalLength的值也赋给mShowHeight，同样达到一个包裹的作用
+        if (isExpending()){
+            Log.w("---展开了---", isExpending()+"----"+mSelectPosition);
+            mShowHeight = ScreenUtil.Companion.getScreenHeight(getContext()) - getPaddingTop() - getPaddingBottom();
+        }else{
+            Log.w("---没展开---", isExpending()+"----"+mSelectPosition);
+            if (mTotalLength == 0){
+                View parentView = (View) getParent();
+                mShowHeight = parentView.getMeasuredHeight() - parentView.getPaddingTop() - parentView.getPaddingBottom();
+            }else{
+                mShowHeight = mTotalLength;
+            }
         }
-        mShowHeight = screenWidth + 220;
     }
 
     private void measureChild(int widthMeasureSpec, int heightMeasureSpec) {
@@ -165,7 +169,7 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
 
         mTotalLength += mOverlapGaps * 2;
         int heightSize = mTotalLength;
-        Log.w("", heightSize+"-----<heightSize> kankan liangge zhi <mShowHeight>-----"+mShowHeight);
+        Log.w("---", heightSize+"-----<heightSize> kankan liangge zhi <mShowHeight>-----"+mShowHeight);
         heightSize = Math.max(heightSize, mShowHeight);
         int heightSizeAndState = resolveSizeAndState(heightSize, heightMeasureSpec, 0);
         setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
@@ -308,6 +312,10 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         performItemClick(mViewHolders.get(mSelectPosition - 1));
     }
 
+    /**
+     * 判断是否展开
+     * @return
+     */
     public boolean isExpending() {
         return mSelectPosition != DEFAULT_SELECT_POSITION;
     }
@@ -317,7 +325,8 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
     }
 
     private void doCardClickAnimation(final ViewHolder viewHolder, int position) {
-        checkContentHeightByParent();
+//        checkContentHeightByParent();
+        requestLayout(); //修改了此处，对CardStackView进行重新测量
         mAnimatorAdapter.itemClick(viewHolder, position);
     }
 

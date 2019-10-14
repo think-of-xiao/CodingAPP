@@ -42,25 +42,29 @@
                     android:layout_height="wrap_content"
                     android:text="添加银行卡" />
             </LinearLayout>
-            <com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
-                android:id="@+id/stackView"
+            <FrameLayout
+                android:id="@+id/rl"
                 android:layout_below="@id/button_top_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:clipToPadding="false"
-                cardstackview:stackAnimationType="allDown"
-                cardstackview:stackHeaderHeight="120dp"
-                cardstackview:stackOverlapGaps="30dp"
-                cardstackview:stackOverlapGapsCollapse="10dp" />
-
+                android:layout_height="wrap_content">
+                <com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
+                    android:id="@+id/stackView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:clipToPadding="false"
+                    cardstackview:stackAnimationType="allDown"
+                    cardstackview:stackHeaderHeight="120dp"
+                    cardstackview:stackOverlapGaps="30dp"
+                    cardstackview:stackOverlapGapsCollapse="10dp" />
+            </FrameLayout>
+            <!--android:layout_marginTop="-200dp"-->
             <LinearLayout
                 android:id="@+id/button_bottom_container"
-                android:layout_below="@id/stackView"
+                android:layout_below="@id/rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="-200dp"
                 android:background="@mipmap/ic_launcher"
                 android:gravity="center"
                 android:orientation="vertical">
