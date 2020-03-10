@@ -37,8 +37,11 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
     static final int DEFAULT_SELECT_POSITION = -1;
 
     private int mTotalLength;
+    //收缩在一起的时候每个item叠在一起的上间距（每个item可露出来的那部分高度，值越小露的越多）
     private int mOverlapGaps;
+    //展开后底部需要展示的item叠在一起的上间距（显示在底部的每个item可露出来的那部分高度，值越大露的越多）
     private int mOverlapGapsCollapse;
+    //底部需要展示的item数量
     private int mNumBottomShow;
     private StackAdapter mStackAdapter;
     private final ViewDataObserver mObserver = new ViewDataObserver();

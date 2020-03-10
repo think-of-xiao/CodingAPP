@@ -3,6 +3,7 @@ package com.example.administrator.myapplication
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_card_stack_view_layout.*
 import android.view.Menu
 import android.view.MenuItem
@@ -34,6 +35,15 @@ class CardStackViewActivity : AppCompatActivity(), CardStackView.ItemExpendListe
         Handler().postDelayed(
                 { mTestStackAdapter!!.updateData(DATAS.asList()) }, 200
         )
+        stackView.setOnTouchListener { _, _ ->
+            //中间设置10像素的空隙，避免头部显隐灵敏度过高
+            if (stackView.scrollY <= 20){
+                button_container.visibility = View.VISIBLE
+            }  else if(stackView.scrollY >= 30) {
+                button_container.visibility = View.GONE
+            }
+            false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -71,6 +81,7 @@ class CardStackViewActivity : AppCompatActivity(), CardStackView.ItemExpendListe
 
     override fun onItemExpend(expend: Boolean) {
         cardStackViewItemExpand = expend
+        button_container.visibility = if (expend || (!expend && stackView.scrollY != 0)) {View.GONE} else {View.VISIBLE}
     }
 
 }

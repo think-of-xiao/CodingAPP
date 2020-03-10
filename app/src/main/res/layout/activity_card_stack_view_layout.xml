@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
-        android:id="@+id/stackView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:clipToPadding="false"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="12dp"/>
-
+<!--<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">-->
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
     <LinearLayout
         android:id="@+id/button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:orientation="vertical"
         android:gravity="center">
         <Button
@@ -32,4 +31,25 @@
             android:text="Next"
             android:onClick="onNextClick"/>
     </LinearLayout>
-</merge>
+    <com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
+        android:id="@+id/stackView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/button_container"
+        android:background="@android:color/white"
+        android:clipToPadding="false"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp"
+        app:stackNumBottomShow="1"
+        app:stackOverlapGaps="-10dp"
+        app:stackOverlapGapsCollapse="80dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/stackView"/>
+</android.support.constraint.ConstraintLayout>
+<!--
+</merge>-->
