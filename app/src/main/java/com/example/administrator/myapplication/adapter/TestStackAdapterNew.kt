@@ -9,13 +9,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.example.administrator.myapplication.R
-import com.example.administrator.myapplication.view.cardstackviewlib.StackAdapter
-import com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
 import com.example.administrator.myapplication.view.cardstackviewlibNew.CardStackViewNew
+import com.example.administrator.myapplication.view.cardstackviewlibNew.StackAdapterNew
 
 
-class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
-    override fun bindView(data: Int?, position: Int, holder: CardStackView.ViewHolder?) {
+class TestStackAdapterNew(mContext: Context): StackAdapterNew<Int>(mContext) {
+    override fun bindView(data: Int?, position: Int, holder: CardStackViewNew.ViewHolder?) {
         if (holder is ColorItemLargeHeaderViewHolder) {
             holder.onBind(data, position)
         }
@@ -27,7 +26,7 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
         }
     }
 
-    override fun onCreateView(parent: ViewGroup?, viewType: Int): CardStackView.ViewHolder {
+    override fun onCreateView(parent: ViewGroup?, viewType: Int): CardStackViewNew.ViewHolder {
         val view: View
         return when (viewType) {
             R.layout.list_card_item_larger_header -> {
@@ -55,10 +54,16 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
 //        return R.layout.list_card_item_larger_header //试试只用一个布局
     }
 
-    internal class ColorItemViewHolder(view: View) : CardStackView.ViewHolder(view) {
-        var mLayout: View = view.findViewById(R.id.frame_list_card_item)
-        var mContainerContent: View = view.findViewById(R.id.container_list_content)
-        var mTextTitle: TextView = view.findViewById<TextView>(R.id.text_list_card_title)
+    internal class ColorItemViewHolder(view: View) : CardStackViewNew.ViewHolder(view) {
+        var mLayout: View
+        var mContainerContent: View
+        var mTextTitle: TextView
+
+        init {
+            mLayout = view.findViewById(R.id.frame_list_card_item)
+            mContainerContent = view.findViewById(R.id.container_list_content)
+            mTextTitle = view.findViewById<TextView>(R.id.text_list_card_title)
+        }
 
         override fun onItemExpand(b: Boolean) {
             mContainerContent.visibility = if (b) View.VISIBLE else View.GONE
@@ -71,9 +76,14 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
 
     }
 
-    internal class ColorItemWithNoHeaderViewHolder(view: View) : CardStackView.ViewHolder(view) {
-        var mLayout: View = view.findViewById(R.id.frame_list_card_item)
-        var mTextTitle: TextView = view.findViewById<TextView>(R.id.text_list_card_title)
+    internal class ColorItemWithNoHeaderViewHolder(view: View) : CardStackViewNew.ViewHolder(view) {
+        var mLayout: View
+        var mTextTitle: TextView
+
+        init {
+            mLayout = view.findViewById(R.id.frame_list_card_item)
+            mTextTitle = view.findViewById<TextView>(R.id.text_list_card_title)
+        }
 
         override fun onItemExpand(b: Boolean) {}
 
@@ -84,7 +94,7 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
 
     }
 
-    internal class ColorItemLargeHeaderViewHolder(view: View) : CardStackView.ViewHolder(view) {
+    internal class ColorItemLargeHeaderViewHolder(view: View) : CardStackViewNew.ViewHolder(view) {
         var mLayout: View = view.findViewById(R.id.frame_list_card_item)
         var mContainerContent: View = view.findViewById(R.id.container_list_content)
         var mTextTitle: TextView = view.findViewById<TextView>(R.id.text_list_card_title)
@@ -111,7 +121,7 @@ class TestStackAdapter(mContext: Context): StackAdapter<Int>(mContext) {
                     .setOnClickListener { Toast.makeText(context, "窝点击了imageButton", Toast.LENGTH_LONG).show() }
             itemView.findViewById<TextView>(R.id.text_view)
                     .setOnClickListener {
-                (itemView.parent as CardStackView)
+                (itemView.parent as CardStackViewNew)
                         .performItemClick(this@ColorItemLargeHeaderViewHolder)
             }
         }

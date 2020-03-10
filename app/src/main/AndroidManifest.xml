@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".CardStackViewActivity">
         </activity>
+        <activity android:name=".CardStackViewActivityNew">
+        </activity>
     </application>
 
 </manifest>

@@ -4,13 +4,15 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/card_stack_view_new"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary60"
         android:gravity="center"
+        android:onClick="twoClick"
         android:textColor="@android:color/white"
         android:textSize="40sp"
-        android:text="fragment_two"
+        android:text="CardStackViewNew"
         />
 
 </android.support.constraint.ConstraintLayout>

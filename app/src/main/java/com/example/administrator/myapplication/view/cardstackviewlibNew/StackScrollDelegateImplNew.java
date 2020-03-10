@@ -1,14 +1,14 @@
-package com.example.administrator.myapplication.view.cardstackviewlib;
+package com.example.administrator.myapplication.view.cardstackviewlibNew;
 
 import android.view.View;
 
-public class StackScrollDelegateImpl implements ScrollDelegate{
+public class StackScrollDelegateImplNew implements ScrollDelegateNew {
 
-    private CardStackView mCardStackView;
+    private CardStackViewNew mCardStackView;
     private int mScrollY;
     private int mScrollX;
 
-    public StackScrollDelegateImpl(CardStackView cardStackView) {
+    public StackScrollDelegateImplNew(CardStackViewNew cardStackView) {
         mCardStackView = cardStackView;
     }
 

@@ -47,16 +47,16 @@
                 android:layout_below="@id/button_top_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.example.administrator.myapplication.view.cardstackviewlib.CardStackView
+                <com.example.administrator.myapplication.view.cardstackviewlibNew.CardStackViewNew
                     android:id="@+id/stackView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:clipToPadding="false"
-                    cardstackview:stackAnimationType="allDown"
-                    cardstackview:stackHeaderHeight="120dp"
-                    cardstackview:stackOverlapGaps="30dp"
-                    cardstackview:stackOverlapGapsCollapse="10dp" />
+                    cardstackview:stackAnimationTypeNew="allDown"
+                    cardstackview:stackHeaderHeightNew="120dp"
+                    cardstackview:stackOverlapGapsNew="30dp"
+                    cardstackview:stackOverlapGapsCollapseNew="10dp" />
             </FrameLayout>
             <!--android:layout_marginTop="-200dp"-->
             <LinearLayout

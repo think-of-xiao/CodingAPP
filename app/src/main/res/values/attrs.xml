@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="CardStackViewNew">
+        <attr name="stackOverlapGapsNew" format="dimension" />
+        <attr name="stackOverlapGapsCollapseNew" format="dimension" />
+        <attr name="stackHeaderHeightNew" format="dimension" />
+        <attr name="stackDurationNew" format="integer" />
+        <attr name="stackNumBottomShowNew" format="integer" />
+        <attr name="stackAnimationTypeNew">
+            <flag name="allDown" value="0" />
+            <flag name="upDown" value="1" />
+            <flag name="upDownStack" value="2" />
+        </attr>
+    </declare-styleable>
     <declare-styleable name="CardStackView">
         <attr name="stackOverlapGaps" format="dimension" />
         <attr name="stackOverlapGapsCollapse" format="dimension" />

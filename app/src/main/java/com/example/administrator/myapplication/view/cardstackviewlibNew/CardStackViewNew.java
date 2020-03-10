@@ -1,5 +1,6 @@
-package com.example.administrator.myapplication.view.cardstackviewlib;
+package com.example.administrator.myapplication.view.cardstackviewlibNew;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,11 +17,12 @@ import android.view.ViewParent;
 import android.widget.OverScroller;
 
 import com.example.administrator.myapplication.R;
+import com.example.administrator.myapplication.utils.ScreenUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardStackView extends ViewGroup implements ScrollDelegate {
+public class CardStackViewNew extends ViewGroup implements ScrollDelegateNew {
 
     private static final int INVALID_POINTER = -1;
     public static final int INVALID_TYPE = -1;
@@ -40,13 +42,13 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
     private int mOverlapGaps;
     private int mOverlapGapsCollapse;
     private int mNumBottomShow;
-    private StackAdapter mStackAdapter;
+    private StackAdapterNew mStackAdapter;
     private final ViewDataObserver mObserver = new ViewDataObserver();
     private int mSelectPosition = DEFAULT_SELECT_POSITION;
     private int mShowHeight;
     private List<ViewHolder> mViewHolders;
 
-    private AnimatorAdapter mAnimatorAdapter;
+    private AnimatorAdapterNew mAnimatorAdapter;
     private int mDuration;
 
     private OverScroller mScroller;
@@ -61,37 +63,43 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
     private int mNestedYOffset;
     private boolean mScrollEnable = true;
 
-    private ScrollDelegate mScrollDelegate;
+    private ScrollDelegateNew mScrollDelegate;
     private ItemExpendListener mItemExpendListener;
 
-    public CardStackView(Context context) {
+    public CardStackViewNew(Context context) {
         this(context, null);
     }
 
-    public CardStackView(Context context, AttributeSet attrs) {
+    public CardStackViewNew(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CardStackView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CardStackViewNew(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CardStackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CardStackViewNew(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs, defStyleAttr, defStyleRes);
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CardStackView, defStyleAttr, defStyleRes);
-        setOverlapGaps(array.getDimensionPixelSize(R.styleable.CardStackView_stackOverlapGaps, dp2px(20)));
-        setOverlapGapsCollapse(array.getDimensionPixelSize(R.styleable.CardStackView_stackOverlapGapsCollapse, dp2px(20)));
-        setDuration(array.getInt(R.styleable.CardStackView_stackDuration, AnimatorAdapter.ANIMATION_DURATION));
-        setAnimationType(array.getInt(R.styleable.CardStackView_stackAnimationType, UP_DOWN_STACK));
-        setNumBottomShow(array.getInt(R.styleable.CardStackView_stackNumBottomShow, 3));
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CardStackViewNew, defStyleAttr, defStyleRes);
+        //闭合时重叠间隙大小
+        setOverlapGaps(array.getDimensionPixelSize(R.styleable.CardStackViewNew_stackOverlapGapsNew, dp2px(20)));
+        //展开时重叠折叠大小
+        setOverlapGapsCollapse(array.getDimensionPixelSize(R.styleable.CardStackViewNew_stackOverlapGapsCollapseNew, dp2px(20)));
+        //动画执行时间，默认400毫秒
+        setDuration(array.getInt(R.styleable.CardStackViewNew_stackDurationNew, AnimatorAdapterNew.ANIMATION_DURATION));
+        //设置展开时动画模式，默认是叠在一起
+        setAnimationType(array.getInt(R.styleable.CardStackViewNew_stackAnimationTypeNew, UP_DOWN_STACK));
+        //展开时底部显示几张卡片，默认为3
+        setNumBottomShow(array.getInt(R.styleable.CardStackViewNew_stackNumBottomShowNew, 3));
         array.recycle();
 
+        //存放viewHolder的list集合《目的是方便复用同种布局》
         mViewHolders = new ArrayList<>();
         initScroller();
     }
@@ -118,9 +126,23 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         measureChild(widthMeasureSpec, heightMeasureSpec);
     }
 
+    @SuppressLint("NewApi")
     private void checkContentHeightByParent() {
-        View parentView = (View) getParent();
-        mShowHeight = parentView.getMeasuredHeight() - parentView.getPaddingTop() - parentView.getPaddingBottom();
+        // 修改了此处，判断是否展开
+        // 这里初次进来肯定是没展开的会走else内容，而else内容中如果总长度mTotalLength为默认值0时，那么mShowHeight会赋值为父容器的测量高度，达到一个包裹的作用
+        // 而当mTotalLength不为0时，说明不是首次展开了，mTotalLength已被赋了值，此时把mTotalLength的值也赋给mShowHeight，同样达到一个包裹的作用
+        if (isExpending()){
+            Log.w("---展开了---", isExpending()+"----"+mSelectPosition);
+            mShowHeight = ScreenUtil.Companion.getScreenHeight(getContext()) - getPaddingTop() - getPaddingBottom();
+        }else{
+            Log.w("---没展开---", isExpending()+"----"+mSelectPosition);
+            if (mTotalLength == 0){
+                View parentView = (View) getParent();
+                mShowHeight = parentView.getMeasuredHeight() - parentView.getPaddingTop() - parentView.getPaddingBottom();
+            }else{
+                mShowHeight = mTotalLength;
+            }
+        }
     }
 
     private void measureChild(int widthMeasureSpec, int heightMeasureSpec) {
@@ -145,6 +167,7 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
 
         mTotalLength += mOverlapGaps * 2;
         int heightSize = mTotalLength;
+        Log.w("---", heightSize+"-----<heightSize> kankan liangge zhi <mShowHeight>-----"+mShowHeight);
         heightSize = Math.max(heightSize, mShowHeight);
         int heightSizeAndState = resolveSizeAndState(heightSize, heightMeasureSpec, 0);
         setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
@@ -191,6 +214,9 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         updateSelectPosition(mSelectPosition);
     }
 
+    /**
+     * 清除滑动和位移，全部回归初始位置
+     */
     public void clearScrollYAndTranslation() {
         if (mSelectPosition != DEFAULT_SELECT_POSITION) {
             clearSelectPosition();
@@ -199,33 +225,33 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         requestLayout();
     }
 
-    public void setAdapter(StackAdapter stackAdapter) {
+    public void setAdapter(StackAdapterNew stackAdapter) {
         mStackAdapter = stackAdapter;
         mStackAdapter.registerObserver(mObserver);
         refreshView();
     }
 
     public void setAnimationType(int type) {
-        AnimatorAdapter animatorAdapter;
+        AnimatorAdapterNew animatorAdapter;
         switch (type) {
             case ALL_DOWN:
-                animatorAdapter = new AllMoveDownAnimatorAdapter(this);
+                animatorAdapter = new AllMoveDownAnimatorAdapterNew(this);
                 break;
             case UP_DOWN:
-                animatorAdapter = new UpDownAnimatorAdapter(this);
+                animatorAdapter = new UpDownAnimatorAdapterNew(this);
                 break;
             default:
-                animatorAdapter = new UpDownStackAnimatorAdapter(this);
+                animatorAdapter = new UpDownStackAnimatorAdapterNew(this);
                 break;
         }
         setAnimatorAdapter(animatorAdapter);
     }
 
-    public void setAnimatorAdapter(AnimatorAdapter animatorAdapter) {
+    public void setAnimatorAdapter(AnimatorAdapterNew animatorAdapter) {
         clearScrollYAndTranslation();
         mAnimatorAdapter = animatorAdapter;
-        if (mAnimatorAdapter instanceof UpDownStackAnimatorAdapter) {
-            mScrollDelegate = new StackScrollDelegateImpl(this);
+        if (mAnimatorAdapter instanceof UpDownStackAnimatorAdapterNew) {
+            mScrollDelegate = new StackScrollDelegateImplNew(this);
         } else {
             mScrollDelegate = this;
         }
@@ -265,6 +291,7 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
                 performItemClick(mViewHolders.get(mSelectPosition));
             }
         });
+        //每个item项的点击事件
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,6 +310,10 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         performItemClick(mViewHolders.get(mSelectPosition - 1));
     }
 
+    /**
+     * 判断是否展开
+     * @return
+     */
     public boolean isExpending() {
         return mSelectPosition != DEFAULT_SELECT_POSITION;
     }
@@ -292,7 +323,8 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
     }
 
     private void doCardClickAnimation(final ViewHolder viewHolder, int position) {
-        checkContentHeightByParent();
+//        checkContentHeightByParent();
+        requestLayout(); //修改了此处，对CardStackView进行重新测量
         mAnimatorAdapter.itemClick(viewHolder, position);
     }
 
@@ -351,6 +383,7 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
                     mNestedYOffset = 0;
                     final ViewParent parent = getParent();
                     if (parent != null) {
+                        //表示子控件消费此次事件
                         parent.requestDisallowInterceptTouchEvent(true);
                     }
                 }
@@ -447,7 +480,7 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
                 if (mIsBeingDragged) {
                     mLastMotionY = y - mScrollOffset[1];
                     final int range = getScrollRange();
-                    if (mScrollDelegate instanceof StackScrollDelegateImpl) {
+                    if (mScrollDelegate instanceof StackScrollDelegateImplNew) {
                         mScrollDelegate.scrollViewTo(0, deltaY + mScrollDelegate.getViewScrollY());
                     } else {
                         if (overScrollBy(0, deltaY, 0, getViewScrollY(),
@@ -665,8 +698,8 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         public LayoutParams(Context c, AttributeSet attrs) {
             super(c, attrs);
 
-            TypedArray array = c.obtainStyledAttributes(attrs, R.styleable.CardStackView);
-            mHeaderHeight = array.getDimensionPixelSize(R.styleable.CardStackView_stackHeaderHeight, -1);
+            TypedArray array = c.obtainStyledAttributes(attrs, R.styleable.CardStackViewNew);
+            mHeaderHeight = array.getDimensionPixelSize(R.styleable.CardStackViewNew_stackHeaderHeightNew, -1);
         }
 
         public LayoutParams(int width, int height) {
@@ -809,7 +842,7 @@ public class CardStackView extends ViewGroup implements ScrollDelegate {
         return mNumBottomShow;
     }
 
-    public ScrollDelegate getScrollDelegate() {
+    public ScrollDelegateNew getScrollDelegate() {
         return mScrollDelegate;
     }
 

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.TextUtils
 import android.view.View
+import android.widget.Toast
 import com.example.administrator.myapplication.fragment.FragmentOne
 import com.example.administrator.myapplication.fragment.FragmentTwo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun oneClick(view: View) {
-        startActivity(Intent(this@MainActivity, CardStackViewActivity::class.java))
+        Toast.makeText(this, "imageView", Toast.LENGTH_SHORT).show()
     }
 
     private fun initView() {

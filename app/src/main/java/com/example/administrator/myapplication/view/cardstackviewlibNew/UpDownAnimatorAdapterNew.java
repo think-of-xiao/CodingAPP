@@ -1,15 +1,15 @@
-package com.example.administrator.myapplication.view.cardstackviewlib;
+package com.example.administrator.myapplication.view.cardstackviewlibNew;
 
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-public class AllMoveDownAnimatorAdapter extends AnimatorAdapter {
+public class UpDownAnimatorAdapterNew extends AnimatorAdapterNew {
 
-    public AllMoveDownAnimatorAdapter(CardStackView cardStackView) {
+    public UpDownAnimatorAdapterNew(CardStackViewNew cardStackView) {
         super(cardStackView);
     }
 
-    protected void itemExpandAnimatorSet(final CardStackView.ViewHolder viewHolder, int position) {
+    protected void itemExpandAnimatorSet(final CardStackViewNew.ViewHolder viewHolder, int position) {
         final View itemView = viewHolder.itemView;
         itemView.clearAnimation();
         ObjectAnimator oa = ObjectAnimator.ofFloat(itemView, View.Y, itemView.getY(), mCardStackView.getScrollY() + mCardStackView.getPaddingTop());
@@ -25,6 +25,9 @@ public class AllMoveDownAnimatorAdapter extends AnimatorAdapter {
                 ObjectAnimator oAnim = ObjectAnimator.ofFloat(child, View.Y, child.getY(), childTop);
                 mSet.play(oAnim);
                 collapseShowItemCount++;
+            } else if (i < mCardStackView.getSelectPosition()) {
+                ObjectAnimator oAnim = ObjectAnimator.ofFloat(child, View.Y, child.getY(), mCardStackView.getScrollY() - child.getHeight());
+                mSet.play(oAnim);
             } else {
                 ObjectAnimator oAnim = ObjectAnimator.ofFloat(child, View.Y, child.getY(), mCardStackView.getShowHeight() + mCardStackView.getScrollY());
                 mSet.play(oAnim);
@@ -33,13 +36,13 @@ public class AllMoveDownAnimatorAdapter extends AnimatorAdapter {
     }
 
     @Override
-    protected void itemCollapseAnimatorSet(CardStackView.ViewHolder viewHolder) {
+    protected void itemCollapseAnimatorSet(CardStackViewNew.ViewHolder viewHolder) {
         int childTop = mCardStackView.getPaddingTop();
         for (int i = 0; i < mCardStackView.getChildCount(); i++) {
             View child = mCardStackView.getChildAt(i);
             child.clearAnimation();
-            final CardStackView.LayoutParams lp =
-                    (CardStackView.LayoutParams) child.getLayoutParams();
+            final CardStackViewNew.LayoutParams lp =
+                    (CardStackViewNew.LayoutParams) child.getLayoutParams();
             childTop += lp.topMargin;
             if (i != 0) {
                 childTop -= mCardStackView.getOverlapGaps() * 2;
@@ -50,6 +53,7 @@ public class AllMoveDownAnimatorAdapter extends AnimatorAdapter {
                 mSet.play(oAnim);
             }
             childTop += lp.mHeaderHeight;
+
         }
     }
 
